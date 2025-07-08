@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HallHop Navigation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Wix Madefor Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background: rgba(0, 0, 0, 0.001);
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "kern" 1;
+        }
+
+        .nav-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0;
+            background: transparent;
+            min-height: 100vh;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .nav-item {
+            position: relative;
+            width: fit-content;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 23px;
+            line-height: 1.2em;
+            color: #FFFFFF;
+            padding: 3px 0;
+            position: relative;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            transform: translateZ(0);
+            will-change: color;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #CDA17C;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #CDA17C;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: #CDA17C;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: auto;
+        }
+
+        .dropdown-toggle::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #CDA17C;
+            transition: width 0.3s ease;
+        }
+
+        .dropdown-toggle:hover::after {
+            width: calc(100% - 26px); /* Subtract arrow width + gap */
+        }
+
+        .dropdown-toggle.active::after {
+            width: calc(100% - 26px); /* Subtract arrow width + gap */
+        }
+
+        .dropdown-arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #FFFFFF;
+            transition: all 0.3s ease;
+            transform: rotate(-90deg);
+            margin-left: 2px;
+            flex-shrink: 0;
+        }
+
+        .dropdown:hover .dropdown-arrow {
+            transform: rotate(0deg);
+            border-top-color: #CDA17C;
+        }
+
+        .dropdown-toggle:hover .dropdown-arrow {
+            border-top-color: #CDA17C;
+        }
+
+        .dropdown-toggle.active .dropdown-arrow {
+            border-top-color: #CDA17C;
+        }
+
+        .dropdown-menu {
+            position: static;
+            background: transparent;
+            backdrop-filter: none;
+            border-radius: 0;
+            padding: 10px 0 0 0;
+            min-width: auto;
+            width: fit-content;
+            box-shadow: none;
+            opacity: 0;
+            visibility: hidden;
+            max-height: 0;
+            transform: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            max-height: 300px;
+            transform: none;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 8px 0;
+            text-decoration: none;
+            font-family: 'Wix Madefor Text', Arial, sans-serif;
+            font-size: 15px;
+            color: #FFFFFF;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            transform: translateZ(0);
+            will-change: color;
+            width: auto;
+        }
+
+        .dropdown-item::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #CDA17C;
+            transition: width 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            color: #CDA17C;
+        }
+
+        .dropdown-item:hover::after {
+            width: 100%;
+        }
+
+        .dropdown-item.active {
+            color: #CDA17C;
+        }
+
+        .dropdown-item.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .nav-link {
+                font-size: 20px;
+            }
+
+            .dropdown-menu {
+                padding: 8px 0 0 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0;
+            }
+
+            .nav-menu {
+                gap: 12px;
+            }
+
+            .nav-link {
+                font-size: 18px;
+            }
+
+            .dropdown-menu {
+                padding: 6px 0 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="home" data-url="https://varunnagaraj2009.wixstudio.com/hallhop">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="meet-hallhop" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/meet-hallhop">Meet HallHop</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="problem" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/problem">The Problem</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="solutions" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/solutions">Solutions</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="our-goal" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/our-goal">Our Goal</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle">
+                    <span>Current Projects</span>
+                    <span class="dropdown-arrow"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" data-page="teacher-command-center" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/teacher-command-center">Teacher Command Center</a>
+                    <a href="#" class="dropdown-item" data-page="pattern-detection-engine" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/pattern-detection-engine">Pattern Detection Engine</a>
+                    <a href="#" class="dropdown-item" data-page="ferpa-first-security-framework" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/ferpa-first-security-framework">FERPA-First Security Framework</a>
+                    <a href="#" class="dropdown-item" data-page="student-insight-hub" data-url="https://varunnagaraj2009.wixstudio.com/hallhop/student-insight-hub">Student Insight Hub</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <script>
+        class HallHopNavigation {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setActivePageFromStorage();
+            }
+
+            setupEventListeners() {
+                // Handle dropdown toggle
+                const dropdownToggle = document.querySelector('.dropdown-toggle');
+                const dropdown = document.querySelector('.dropdown');
+
+                dropdownToggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle('open');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!dropdown.contains(e.target)) {
+                        dropdown.classList.remove('open');
+                    }
+                });
+
+                // Handle main navigation links
+                const navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.handleNavigation(link);
+                    });
+                });
+
+                // Handle dropdown items
+                const dropdownItems = document.querySelectorAll('.dropdown-item');
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.handleNavigation(item);
+                        dropdown.classList.remove('open');
+                    });
+                });
+            }
+
+handleNavigation(element) {
+    const page = element.getAttribute('data-page');
+
+    if (!page) return;
+
+    // Remove active class from all navigation items
+    document.querySelectorAll('.nav-link, .dropdown-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Add active class to clicked item
+    element.classList.add('active');
+
+    // Send navigation message to parent (home.html iframe container)
+    try {
+        window.parent.postMessage({ page }, "*");
+        console.log(`📨 Sent navigation to parent: ${page}`);
+    } catch (error) {
+        console.error("🚫 Could not send postMessage:", error);
+    }
+}
+
+
+            setActivePageFromStorage() {
+                // Try to set active page from localStorage
+                try {
+                    const navData = localStorage.getItem('hallhopNavigation');
+                    if (navData) {
+                        const { page } = JSON.parse(navData);
+                        const activeLink = document.querySelector(`[data-page="${page}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                } catch (error) {
+                    console.log('Could not read navigation state from localStorage:', error);
+                }
+            }
+
+            // Method to set active page externally (can be called from parent)
+            setActivePage(page) {
+                // Remove active class from all items
+                document.querySelectorAll('.nav-link, .dropdown-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to matching page
+                const activeLink = document.querySelector(`[data-page="${page}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        }
+
+        // Initialize navigation when DOM is loaded
+        let navigation;
+        document.addEventListener('DOMContentLoaded', () => {
+            navigation = new HallHopNavigation();
+        });
+
+        // Handle messages from parent window (for setting active state)
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'setActivePage') {
+                const page = event.data.page;
+                if (navigation) {
+                    navigation.setActivePage(page);
+                }
+            }
+        });
+
+        // Listen for localStorage changes (for cross-tab synchronization)
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'hallhopNavigation' && event.newValue) {
+                try {
+                    const { page } = JSON.parse(event.newValue);
+                    if (navigation) {
+                        navigation.setActivePage(page);
+                    }
+                } catch (error) {
+                    console.error('Error parsing localStorage change:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
