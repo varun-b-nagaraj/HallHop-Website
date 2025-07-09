@@ -4,6 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HallHop</title>
+
+  <!-- Favicon setup (7 variations) -->
+<!-- Standard Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+<!-- Android Icons -->
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+
+<!-- Browser Favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+  <meta name="theme-color" content="#ffffff">
+  <!-- Social Sharing Meta Tags -->
+<meta property="og:title" content="HallHop" />
+<meta property="og:description" content="Smarter, safer hall pass tracking — designed for modern schools." />
+<meta property="og:image" content="https://hallhop.com/large_image.png" />
+<meta property="og:url" content="https://hallhop.com/" />
+<meta name="twitter:card" content="summary_large_image">
+
+
   <style>
     html, body {
       margin: 0;
@@ -40,8 +65,6 @@
 
       if (type === 'navigate' && typeof page === 'string') {
         console.log('Redirecting iframe to:', page);
-
-        // Set new iframe source based on received page
         const iframe = document.getElementById('hallhopFrame');
         iframe.src = `https://varunnagaraj2009.wixstudio.com/hallhop/${page}`;
       }
